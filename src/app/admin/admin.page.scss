@@ -1,0 +1,41 @@
+.set_time{
+    block-size: 25%;
+}
+
+.backg{
+    --background: none;
+    background-image: url('../../assets/images/back3.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size:auto;
+}
+
+.center{
+    text-align: center;
+    padding-left: 25%;
+}
+.text_center{
+    text-align: center;
+    color: darkslategray;
+}
+
+ion-content {
+    --background: none;
+    background-image: url('../../assets/images/back3.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size:auto;
+  }
+
+  .input{
+      background-position:center;
+      background-color: none;
+      padding-left: 25%;
+      padding-right: 25%;
+
+      border-radius: 25px;
+  }
+
+  .full_button{
+      background-position: 100%;
+  }

@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" class="back" defaultHref="folder"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+  <div>
+    <h1 style="text-align: center;"> Welcome {{name}} {{surname}} </h1>
+  </div>
+  
+  <div>
+    <ion-card>
+      <ion-item>
+        <div class="ion-text-left">Test Result: </div>
+        <div *ngIf="status==='Positive'"> 
+          <ion-badge color="danger" class="ion-text-right">{{status}}</ion-badge>
+        </div>
+        <div *ngIf="status==='Negative'"> 
+          <ion-badge color="success" class="ion-text-right">{{status}}</ion-badge>
+        </div>
+      </ion-item>
+    </ion-card>
+    <ion-card>
+      <ion-item>
+        <ion-label>Last Test Date: </ion-label>
+        <ion-datetime class='mycustom' displayFormat="MMM DD, YYYY" disabled [(ngModel)]="date" placeholder={{date}}></ion-datetime>
+      </ion-item>
+    </ion-card>
+  </div>
+  <br/>
+  <ion-button expand="block" color="secondary" (click)="goScan()">Update test result</ion-button>
+  <br/>
+  <ion-button expand="block" color="danger" (click)="goStudentList()">Show Student List</ion-button>
+
+  <!-- (click)="functionName()"  -->
+
+
+</ion-content>

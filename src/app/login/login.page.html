@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" class="back" defaultHref="folder"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <h1 style="text-align: center;"> Welcome {{name}} {{surname}} </h1>
+  </div>
+
+<div>
+  <ion-card>
+    <ion-item>
+      <div class="ion-text-left">Test Result: </div>
+      <div *ngIf="status==='Positive'"> 
+        <ion-badge color="danger" class="ion-text-right">{{status}}</ion-badge>
+      </div>
+      <div *ngIf="status==='Negative'"> 
+        <ion-badge color="success" class="ion-text-right">{{status}}</ion-badge>
+      </div>
+    </ion-item>
+  </ion-card>
+  <ion-card>
+    <ion-item>
+      <div >Last Test Date: </div>
+      <div *ngIf="status==='Positive'"> 
+        <ion-badge color="danger">{{date}}</ion-badge>
+      </div>
+      <div *ngIf="status==='Negative'"> 
+        <ion-badge color="success">{{date}}</ion-badge>
+      </div>
+    </ion-item>
+  </ion-card>
+</div>
+  
+
+
+
+<div>
+  <h1 style="text-align: center;">My Courses</h1>
+</div>
+  
+
+  <ion-card>
+    <ion-list>
+      <ion-item *ngFor="let entry of courses" color="none">
+        {{entry.name}}
+        <ion-checkbox  slot="end" [(ngModel)]="entry.isChecked"></ion-checkbox>
+      </ion-item>
+    </ion-list> 
+  </ion-card>
+
+ 
+  
+  
+  <ion-button color="primary" expand="section" (click)="modifyTestResult()">Update Test Result</ion-button>
+  <br/>
+
+
+
+
+
+</ion-content>

@@ -1,0 +1,32 @@
+ion-content {
+    --background: none;
+    background-image: url('../../assets/images/back3.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size:auto;
+  }
+
+  .profile_pic{
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: #E6E7ED;
+    border-radius: 20px;
+    background-image: url(https://icons.iconarchive.com/icons/paomedia/small-n-flat/256/profile-icon.png);
+    background-position:50% 50%;
+    background-repeat:no-repeat;  
+
+  }
+
+  .center{
+    text-align: center;
+    padding-left: 55px;
+  }
+  
+  .lut{
+    color: rgb(187, 15, 38) ;
+  }
+
+  ion-list {
+    background: transparent;
+  }

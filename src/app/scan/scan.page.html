@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button class="back" (click)="back()" defaultHref="folder"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+     
+    </ion-card-header>
+    
+    <ion-card-content>  
+
+      <ion-item>
+        <ion-label>Last Test Date</ion-label>
+        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="lastdate" disabled placeholder={{lastdate}}></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>New Test Date</ion-label>
+        <ion-datetime displayFormat="MMM DD, YYYY" [(ngModel)]="mydate" placeholder={{mydate}}></ion-datetime>
+      </ion-item>
+  
+  
+      <ion-list >
+      <ion-radio-group [(ngModel)]="status" >
+        <ion-list-header>
+          <ion-label >Test Result</ion-label>
+        </ion-list-header>
+      
+        <ion-item>
+          <ion-label  color="secondary">Negative</ion-label>
+          <ion-radio slot="start" value="Negative"></ion-radio>
+        </ion-item>
+          <ion-item>
+            <ion-label  color="danger" >Positive</ion-label>
+            <ion-radio  slot="start" value="Positive"></ion-radio>
+          </ion-item>
+
+          
+        </ion-radio-group>
+      </ion-list>
+      <ion-button  (click)="save()" expand="full" color="warning"> 
+        Save 
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

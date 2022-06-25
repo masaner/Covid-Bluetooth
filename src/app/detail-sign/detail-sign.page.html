@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" class="back" defaultHref="folder"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-content>
+      <ion-item class="background_clear">
+        <ion-input class="required" placeholder="E-Mail" [(ngModel)]="email" required></ion-input>
+      </ion-item>
+      <br/>
+      <ion-item class="background_clear">
+        <ion-input class="required" placeholder="Password" [(ngModel)]="password" required></ion-input>
+      </ion-item>
+      <br/>
+      <ion-item class="background_clear">
+        <ion-input class="required" placeholder="First Name" [(ngModel)]="name" required></ion-input>
+      </ion-item>
+      <br/>
+      <ion-item class="background_clear">
+        <ion-input class="required" placeholder="Last Name" [(ngModel)]="surname" required></ion-input>
+      </ion-item>
+    </ion-card-content>
+      <label class="required">Required </label>
+  </ion-card>
+
+  <ion-button (click)="signupStep2()" expand="block" fill='secondary' shape="round">
+    Continue
+  </ion-button>
+</ion-content>

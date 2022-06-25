@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="goBack()" class="back" defaultHref="folder"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-card-header>
+    <ion-card-title>Hello {{name}} {{surname}} !</ion-card-title>
+    <ion-card-subtitle>Please select your courses.</ion-card-subtitle>
+
+  </ion-card-header>
+
+  <div>
+    <h1 style="text-align: center;"> My Courses </h1>
+  </div>
+
+  <ion-list>
+    <ion-item *ngFor="let entry of courses" color="none">
+      {{entry.name}}
+      <ion-checkbox slot="end" [(ngModel)]="entry.isChecked"></ion-checkbox>
+    </ion-item>
+  </ion-list> 
+
+  <div>
+    <ion-button shape="round" expand="full" color="secondary" (click)="finishSignUp()">Sign Up</ion-button>
+  </div>
+  
+</ion-content>

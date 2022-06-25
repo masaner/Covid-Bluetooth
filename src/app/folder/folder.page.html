@@ -1,0 +1,40 @@
+<ion-content [fullscreen]="true">
+
+
+  <ion-card class="card">
+    <ion-card-header>
+      <ion-card-subtitle></ion-card-subtitle>
+      <ion-icon name="people"></ion-icon>
+
+      <ion-card-title>EMU Covid Tracker</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content >
+      
+
+      <div class="messageShow">{{messageSend}}</div> 
+      <div class="messageShow">Please upload test result every {{daysSend}} days</div> 
+
+
+    </ion-card-content>
+  </ion-card>
+
+
+  <ion-card>
+    <ion-card-content>
+      <ion-item class="background_clear">
+        <ion-input placeholder="E-mail" [(ngModel)]="entered_email" ></ion-input>
+      </ion-item>
+      <br/>
+      <ion-item class="background_clear">
+        <ion-input type="password" placeholder="Password" [(ngModel)]="entered_password"></ion-input>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+
+<ion-button color='light' shape='round' class="login" expand="full" (click)="sendLoginInfo()">Login</ion-button> 
+
+<ion-button class="signup" expand="full" fill="clear" (click)="signupPage()">Don't have an account yet? Sign Up</ion-button>
+
+</ion-content>

@@ -1,0 +1,16 @@
+.back{
+    color: rgb(156, 3, 3);
+}
+
+.required:after {
+    content:" *";
+    color: red;
+  }
+
+ion-content {
+    --background: none;
+    background-image: url('../../assets/images/back3.jpg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size:auto;
+  }

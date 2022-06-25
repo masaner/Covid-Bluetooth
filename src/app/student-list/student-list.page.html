@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="back()" class="back" defaultHref="folder"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div>
+    <h1 style="text-align: center;font-size: 22px"> {{name}} {{surname}}'s Students With Covid </h1>
+  </div>
+    <ion-list style="height: auto;">
+      <ion-item *ngFor="let data of students">
+        <ion-label> {{data.first_name}} {{data.last_name}}</ion-label>
+        <ion-label color="danger"> {{data.test_result}} </ion-label>
+        <ion-label> {{data.test_date.split('T')[0]}} </ion-label>
+
+      </ion-item>
+    </ion-list>
+  <br/>
+</ion-content>

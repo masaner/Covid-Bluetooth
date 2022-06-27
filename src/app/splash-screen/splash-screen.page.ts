@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router } from '@angular/router';
 import { ValuesService } from '../values.service';
 
 @Component({
@@ -10,19 +10,17 @@ import { ValuesService } from '../values.service';
 export class SplashScreenPage implements OnInit {
 
   constructor(public vals: ValuesService, public router: Router) { 
+  }
+
+  ionViewWillEnter() {
     console.log('Initializing Splashscreen');
     console.log('Sending Request');
     setTimeout(() => {
       this.vals.GetSettings();
     }, 5000);
   }
-  
-  ionViewWillEnter() {
-    
-  }
 
   ngOnInit() {
-    
   }
 
 }

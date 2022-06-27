@@ -39,10 +39,19 @@ export class AppComponent implements OnInit{
       this.OneSignalInit();
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.buffer();
       this.platform.backButton.subscribeWithPriority(0, () => {
         console.log();
       });
     });
+  }
+  buffer() {
+    setTimeout(() => {
+      OneSignal.getDeviceState(function(jsonData) {
+        console.log(jsonData);
+        localStorage.setItem('deviceID', jsonData.userId);
+      });
+    }, 2000);
   }
   getDayDiff(startDate: Date, endDate: Date): number {
     const msInDay = 24 * 60 * 60 * 1000;
@@ -83,12 +92,6 @@ export class AppComponent implements OnInit{
     }
   }
   ngOnInit() {
-    OneSignal.getDeviceState(function(jsonData) {
-      console.log(jsonData);
-      let mydeviceid = jsonData.userId;
-      localStorage.setItem('deviceID', mydeviceid);
-    });
-
     let dbSettings = JSON.parse(localStorage.getItem('Welcome-Info'));
     this.test_period = dbSettings.test_period;
     this.cleanContactList();

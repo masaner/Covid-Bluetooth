@@ -233,14 +233,22 @@ export class ValuesService {
       "message": message,
       "test_period": day,
     }
+    let dbSettings = {
+      message: message, test_period: day,
+    };
     this.http.put(url, data, { headers: this.getHeaders() }).subscribe
       (async (response) =>
       {
         console.log(response)
+
       },
       (err) => {
         console.log(err);
-      });
+        });
+      setTimeout(() => {
+        localStorage.setItem("Welcome-Info", JSON.stringify(dbSettings));
+        this.router.navigate(['/folder']);
+      }, 1000);
   }
   //TESTED
   GetSettings() {

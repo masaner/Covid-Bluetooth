@@ -32,8 +32,10 @@ export class AdminPage implements OnInit {
    
   }
 
-  previousPage() {
-    this.router.navigate(['/folder']);
+  goBack() {
+    setTimeout(() => {
+      this.router.navigate(['/folder']);
+    }, 500);
   }
 
 }

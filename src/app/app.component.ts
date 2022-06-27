@@ -18,13 +18,14 @@ import { BackgroundMode } from '@awesome-cordova-plugins/background-mode/ngx';
 })
 export class AppComponent implements OnInit{
   title = 'OneSignal-Angular';
-  devices: any[] = [];
-
+  savedDevices: any[] = [];
+  cleanedDevices: any[] = [];
+  indexesToDelete: any[] = [];
+  test_period: any;
+  mydeviceid: any;
   constructor(
     private platform: Platform,
     private statusBar: StatusBar,
-    private alertCtrl: AlertController,
-    private os: OneSignalService,
     public toastCtrl: ToastController,
     private splashScreen: SplashScreen,
     private ble: BLE,
@@ -33,42 +34,114 @@ export class AppComponent implements OnInit{
   ) {
     this.initializeApp();
   }
-
   initializeApp() {
     this.platform.ready().then(() => {
       this.OneSignalInit();
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-
+      this.platform.backButton.subscribeWithPriority(0, () => {
+        console.log();
+      });
     });
   }
-
-  async sendAlert(msg) {
-    const toast = await this.toastCtrl.create({ message: msg, duration: 2000, color: 'danger', position: 'top' });
-    await toast.present();
+  getDayDiff(startDate: Date, endDate: Date): number {
+    const msInDay = 24 * 60 * 60 * 1000;
+    return Math.round(
+      Math.abs(endDate.getTime() - startDate.getTime()) / msInDay,
+    );
   }
-
+  cleanContactList() {
+    this.savedDevices = JSON.parse(localStorage.getItem('closeContact'));
+    if (this.savedDevices !== null) {
+      for (let key in this.savedDevices) {
+        if (this.savedDevices.hasOwnProperty(key)) {
+          let element = this.savedDevices[key];
+          let date = new Date(element.date);
+          let dateDiff: Number = this.getDayDiff(new Date(), date);
+          let adminDate: Number = this.test_period;
+          if (dateDiff > adminDate)
+          {
+            //must remove id from list
+            var index = this.savedDevices.findIndex(obj => obj.id==element.id);
+            this.indexesToDelete.push(index);
+            continue;
+          }
+          else if (dateDiff < adminDate){continue;}
+          else if (dateDiff === adminDate){continue;}
+        }
+      }
+      for (let key in this.indexesToDelete) {
+        delete this.savedDevices[this.indexesToDelete[key]];
+      }
+      localStorage.removeItem('closeContact');
+      this.savedDevices.forEach((element) => {
+        if (element !== null) {
+          this.cleanedDevices.push(element);
+        }
+      });
+      localStorage.setItem('closeContact', JSON.stringify(this.cleanedDevices));
+    }
+  }
   ngOnInit() {
+    OneSignal.getDeviceState(function(jsonData) {
+      console.log(jsonData);
+      let mydeviceid = jsonData.userId;
+      localStorage.setItem('deviceID', mydeviceid);
+    });
+
+    let dbSettings = JSON.parse(localStorage.getItem('Welcome-Info'));
+    this.test_period = dbSettings.test_period;
+    this.cleanContactList();
     this.backgroundMode.enable();
-    this.devices = [];
+    setTimeout(() => {
       this.ble.startScan([]).subscribe(
         device => this.onDeviceDiscovered(device)
       );
-    
+    }, 2000);
   }
   onDeviceDiscovered(device) {
-    let newDate = Date.now();
-    console.log(newDate);
-    console.log(newDate.toString());
+    let initialDate: String = new Date().toISOString();
+    let date = initialDate.split('T')[0];
+    delete device.advertising;
+    delete device.name;
+    let deviceID: String = device.id;
+    let rssiVal: Number = device.rssi;
+    let resistanceVal: Number = -50; 
+    console.log(deviceID + ' ' + rssiVal);
+    if (rssiVal < resistanceVal) {
+      //NOT CLOSE ENOUGH
+      console.log('FAR');
+    }
+    else {
+      //REALLY CLOSE
+      console.log('CLOSE');
 
-    console.log('Discovered' + JSON.stringify(device,null,2));
-    this.ngZone.run(()=>{
-      this.devices.push(device)
-      console.log(device)
-    })
-    localStorage.setItem('closeContact', JSON.stringify(this.devices));
+      let dateInfo = { date: date };
+      var mergedObj = { ...device, ...dateInfo };
+
+      this.ngZone.run(() => {
+        if (this.contains(this.cleanedDevices, "id", mergedObj)) {
+          console.log('has it');
+        }
+        else {
+          console.log('doesnt have it');
+          this.cleanedDevices.push(mergedObj)
+          //WE NEED TO SEND INFO TO DB TO FIND WHICH ID WE FOUND
+          localStorage.setItem('closeContact', JSON.stringify(this.cleanedDevices));
+        }
+      })
+    }
   }
-      
+  contains(arr, key, mergedObj) {
+    let val = mergedObj.id;
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i][key] === val) {
+        return true;
+      }
+    }
+    console.log('Nope! Add it!');
+    return false;
+  }   
   OneSignalInit() {
       // Uncomment to set OneSignal device logging to VERBOSE  
       // OneSignal.setLogLevel(6, 0);
@@ -84,61 +157,4 @@ export class AppComponent implements OnInit{
           console.log("User accepted notifications: " + accepted);
       });
   }
-
-  setupPush() {
-    // // I recommend to put these into your environment.ts
-    // this.oneSignal.startInit('e6d7967c-18a3-4425-85a9-30f37023b939', 'io.ionic.starter');
- 
-    // this.oneSignal.inFocusDisplaying(this.oneSignal.OSInFocusDisplayOption.None);
- 
-    // // Notifcation was received in general
-    // this.oneSignal.handleNotificationReceived().subscribe(data => {
-    //   let msg = data.payload.body;
-    //   let title = data.payload.title;
-    //   let additionalData = data.payload.additionalData;
-    //   this.showAlert(title, msg, additionalData.task);
-    //   console.log("INFO: " + msg);
-    //   console.log("INFO2: " + title);
-    //   console.log("INFO3: " + additionalData);
-    //   this.sendAlert(msg);
-    // });
- 
-    // // Notification was really clicked/opened
-    // this.oneSignal.handleNotificationOpened().subscribe(data => {
-    //   // Just a note that the data is a different place here!
-    //   let additionalData = data.notification.payload.additionalData;
-
-    //   console.log("INFO3: " + additionalData);
-    //   console.log("INFO3: " + additionalData.task);
-
-    //   this.showAlert('Notification opened', 'You already read this before', additionalData.task);
-    // });
- 
-    // this.oneSignal.endInit();
-  }
- 
-  async showAlert(title, msg, task) {
-    const alert = await this.alertCtrl.create({
-      header: title,
-      subHeader: msg,
-      buttons: [
-        {
-          text: `Action: ${task}`,
-          handler: () => {
-            // E.g: Navigate to a specific screen
-          }
-        }
-      ]
-    })
-    alert.present();
-  }
-  public appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
-  ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
 }

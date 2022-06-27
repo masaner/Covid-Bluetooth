@@ -27,28 +27,6 @@ export class FolderPage implements OnInit {
   constructor(public http: HttpClient,public vals:ValuesService,public activatedRoute: ActivatedRoute,private router: Router) { }
 
   ngOnInit() {
-    // let dbSettings = JSON.parse(localStorage.getItem('Welcome-Info'));
-    // let userSettings = JSON.parse(localStorage.getItem('USER-INFO'));
-
-    // //Checks if there's a welcome message
-    // if (dbSettings == null) {
-    //   this.messageSend = 'Please get tested if you have symptoms of Covid-19';
-    //   this.daysSend = '7';
-    // }
-    // else {
-    //   this.messageSend = dbSettings.message;
-    //   this.daysSend = dbSettings.test_period;
-    // }
-
-    // //Checks if there's any user info
-    // if (userSettings == null) {
-    //   this.entered_email = '';
-    //   this.entered_password = '';
-    // }
-    // else {
-    //   this.entered_email = userSettings.username;
-    //   this.entered_password = userSettings.password;
-    // }
   }
 
   ionViewWillEnter() {

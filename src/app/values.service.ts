@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 import { NavigationExtras, Router } from '@angular/router';
-
 
 @Injectable({
   providedIn: 'root'
@@ -31,19 +29,20 @@ export class ValuesService {
 	c3: any;
 	c4: any;
   c5: any;
-  
+
+  first_name  :any;
+	last_name   :any;
+  course_1    :any;
+  course_2    :any;
+  course_3    :any;
+  course_4    :any;
+  course_5    :any;
+  test_date   :any;
+  test_result :any;
   //SETTINGS
   appDays: any;
   appMessage: any;
 
-  //Covid Students
-  // positiveStudents: Array<any> = [
-  //   { name: "CMPE-411", description: "course_1" , isChecked: false},
-  //   { name: "CMPE-224", description: "course_2" , isChecked: false},
-  //   { name: "CMPE-405", description: "course_3" , isChecked: false},
-  //   { name: "CMSE-461", description: "course_4" , isChecked: false},
-  //   { name: "CMPE-419", description: "course_5" , isChecked: false}
-  // ];
   positiveStudents: Array<any> = [];
 
   getHeaders() {
@@ -52,10 +51,13 @@ export class ValuesService {
       //Authorization: "Bearer " + this.token
     });
   }
+  
 
   constructor(public http: HttpClient, public toastCtrl: ToastController, private router: Router) { }
   
+  //TESTED
   GetLoginInfo(param1, param2) {
+    let deviceID = localStorage.getItem('deviceID');
     let url = "https://covid-emu.herokuapp.com/users/";
     this.http.get(url + param1, { headers: this.getHeaders() }).subscribe
     (async (response) => {
@@ -69,7 +71,7 @@ export class ValuesService {
 
           let element = response[key];
           let person = {
-            username: element.username, password: element.password, first_name: element.first_name,
+            device_id: deviceID, username: element.username, password: element.password, first_name: element.first_name,
             last_name: element.last_name, degree: element.degree, test_result: element.test_result, test_date: element.test_date,
             course_1: element.course_1, course_2: element.course_2, course_3: element.course_3, course_4: element.course_4, course_5: element.course_5
           };
@@ -85,16 +87,32 @@ export class ValuesService {
           let course_3 = person.course_3;
           let course_4 = person.course_4;
           let course_5 = person.course_5;
-
           if (param2 == password)
           {
             localStorage.setItem("USER-INFO", JSON.stringify(person));
             console.log('LOGIN SUCCESSFUL');
+            let data =
+            {
+                "device_id": deviceID, //bluetooth Can change
+                "username": username,
+                "password": password,
+                "first_name": first_name,
+                "last_name": last_name,
+                "degree": degree,
+                "test_date": test_date,
+                "test_result": test_result,
+                "course_1": course_1,  //Can change
+                "course_2": course_2,  //Can change
+                "course_3": course_3,  //Can change
+                "course_4": course_4,  //Can change
+                "course_5": course_5,  //Can change
+            }
+            this.UpdateUser(data,username);
             const toast = await this.toastCtrl.create({message:'Login Successful', duration:2000, color:'success',position:'top'});
             await toast.present();
             let params: NavigationExtras = {
               queryParams: {
-                device_id: null,
+                device_id: deviceID,
                 emailFinal: username,
                 passwordFinal: password,
                 nameFinal: first_name,
@@ -138,10 +156,7 @@ export class ValuesService {
         console.log(err);
       });
   }
-  Get2(url, params) {
-    let newurl = `${url}/${params}`;
-    return this.http.get(url + params, { headers: this.getHeaders()});
-  }
+  //TESTED
   CreateUser(info) {
     let url = "https://covid-emu.herokuapp.com/users";
     //console.log(info);
@@ -173,103 +188,14 @@ export class ValuesService {
     };
     console.log(this.dataRecieved);
   }
-  UpdateUser() {
-    let username    :any;
-    let password    :any;
-    let first_name  :any;
-    let last_name   :any;
-    let device_id   :any;
-    let degree      :any;
-    let course_1    :any;
-    let course_2    :any;
-    let course_3    :any;
-    let course_4    :any;
-    let course_5    :any;
-    let test_date   :any;
-    let test_result :any;
-    let userInfo = JSON.parse(localStorage.getItem('USER-INFO'));
-    let covidInfo = JSON.parse(localStorage.getItem('Test-Info'));
-
-    //Checks if there's any user info
-    if (userInfo == null) {
-      return;
-    }
-    else {
-      device_id   = userInfo.device_id;
-      username    = userInfo.username;
-      password    = userInfo.password;
-      first_name  = userInfo.first_name;
-      last_name   = userInfo.last_name;
-      degree      = userInfo.degree;
-      course_1    = userInfo.course_1;
-      course_2    = userInfo.course_2;
-      course_3    = userInfo.course_3;
-      course_4    = userInfo.course_4;
-      course_5    = userInfo.course_5;
-      
-      if (covidInfo == null) {
-        test_date = userInfo.test_date;
-        test_result = userInfo.test_result;
-      }
-      else {
-        test_date = covidInfo.test_date;
-        test_result = covidInfo.test_result;
-      }
-    }
-    let data =
-    {
-      "device_id":    device_id, //bluetooth
-      "username":     username,
-      "password":     password,
-      "first_name":   first_name,
-      "last_name":    last_name,
-      "degree":       degree,
-      "course_1":     course_1,
-      "course_2":     course_2,
-      "course_3":     course_3,
-      "course_4":     course_4,
-      "course_5":     course_5,
-      "test_date":    test_date,
-      "test_result":  test_result
-    }
-    let body = data;
-    let url = "https://covid-emu.herokuapp.com/users";
-    let newurl = `${url}/${username}`;
-    this.http.put<any>(newurl, body, {headers: this.getHeaders(), responseType: 'json'}).subscribe(data => {
-      console.log(data);
-      this.dataRecieved = data;
-      if (data.degree == 3) {
-        localStorage.setItem("USER-INFO", JSON.stringify(data));
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 2000);
-      }
-      else if (data.degree == 2) {
-        localStorage.setItem("USER-INFO", JSON.stringify(data));
-        setTimeout(() => {
-          this.router.navigate(['/staff']);
-        }, 2000);
-      }
-      else if (data.degree == 1) {
-        localStorage.setItem("USER-INFO", JSON.stringify(data));
-        setTimeout(() => {
-          this.router.navigate(['/admin']);
-
-        }, 2000);
-      }
-    }),(err) => {
-      console.log('entering errors');
-      console.log(err);
-    };
-    console.log(this.dataRecieved);
-  }
-  UpdateUser2(passed,username) {
+  //TESTED
+  UpdateUser(passed,username) {
     let body = passed;
     console.log(body);
-
+    console.log(username);
     let url = "https://covid-emu.herokuapp.com/users";
-    let newurl = `${url}/${username}`;
-    this.http.put<any>(newurl, body, {headers: this.getHeaders(), responseType: 'json'}).subscribe(data => {
+    // let newurl = `${url}/${username}`;
+    this.http.put<any>(url, body, {headers: this.getHeaders(), responseType: 'json'}).subscribe(data => {
       let params: NavigationExtras = {
         queryParams: {
           test_result: body.test_result,
@@ -279,6 +205,7 @@ export class ValuesService {
       localStorage.setItem("USER-INFO", JSON.stringify(passed));
       let covidInfo = { test_result: passed.test_result, test_date: passed.test_date};
       localStorage.setItem("Test-Info", JSON.stringify(covidInfo));
+      
       //SEND CLOSE CONTACTS TO DB AND SEND NOTIFICATION TO DEVICES
       if (passed.degree == 3) {
         setTimeout(() => {
@@ -296,13 +223,11 @@ export class ValuesService {
         }, 1000);
       }
     }),(err) => {
-      console.log('entering errors');
-      console.log(err);
+      alert(err);
     };
   }
+  //TESTED
   UpdateSettings(message, day) {
-    console.log(message);
-    console.log(day);
     let url = "https://covid-emu.herokuapp.com/settings";
     let data =
     {
@@ -315,10 +240,10 @@ export class ValuesService {
         console.log(response)
       },
       (err) => {
-        console.log('entering errors');
         console.log(err);
       });
   }
+  //TESTED
   GetSettings() {
     let url = "https://covid-emu.herokuapp.com/settings";
     this.http.get(url, { headers: this.getHeaders() }).subscribe
@@ -333,20 +258,12 @@ export class ValuesService {
           let dbSettings = {
             message: element.message, test_period: element.test_period,
           };
-         
           let appMessage = dbSettings.message;
           let appDays = dbSettings.test_period;
           console.log(appMessage);
           console.log(appDays);
-          let params: NavigationExtras = {
-            queryParams: {
-              messageSend: appMessage,
-              daysSend: appDays,
-            }, 
-          };
-          console.log('Welcome-Info: ' +  dbSettings);
+
           localStorage.setItem("Welcome-Info", JSON.stringify(dbSettings));
-          this.router.navigate(['/folder'], params);
         }
       }
       console.log(response);
@@ -354,22 +271,20 @@ export class ValuesService {
         console.log('entering errors');
         console.log(err);
         this.check2 = false;
-      });
-    return this.check2;
+    });
+    
+    this.router.navigate(['/folder']);
   }
-  GetMyStudents(course:string) {
+  //TESTED
+  GetMyStudents(course) {
     let url = "https://covid-emu.herokuapp.com/positives";
     let newurl = `${url}/${course}`;
     let positiveStudents = [];
-    // console.log(course);
     this.http.get<any>(newurl, { headers: this.getHeaders(), responseType: 'json' }).subscribe(data => {
-      // console.log(data);
       if (typeof (data) == "undefined") {
-        // console.log('missing data');
       }
       for (let key in data) {
         if (data.hasOwnProperty(key)) {
-          // console.log(data[key]);
           positiveStudents.push(data[key]);
         }
       }
@@ -377,11 +292,9 @@ export class ValuesService {
         console.log('entering errors');
         console.log(err);
     });
-    // console.log('SENDING: ' + this.positiveStudents);
-    // return this.positiveStudents;
-    return positiveStudents;
-
+    setTimeout(() => {
+      localStorage.setItem('positiveStudents', JSON.stringify(positiveStudents));
+      this.router.navigate(['/student-list']);
+    }, 1000);
   }
 }
-
-

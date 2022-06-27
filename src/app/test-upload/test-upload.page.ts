@@ -78,7 +78,7 @@ export class TestUploadPage implements OnInit {
         "course_4": c4,  //Can change
         "course_5": c5,  //Can change
     }
-    this.vals.UpdateUser2(data,userInfo.username);
+    this.vals.UpdateUser(data, userInfo.username);
   }
   
   goBack() {
@@ -86,5 +86,4 @@ export class TestUploadPage implements OnInit {
       this.router.navigate(['/login']);
     }, 500);
   }
-
 }

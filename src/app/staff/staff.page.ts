@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { NavigationExtras, Router, ActivatedRoute } from '@angular/router';
 import { ValuesService } from '../values.service'; 
 
@@ -35,7 +35,7 @@ export class StaffPage implements OnInit {
   public name:any;
   public surname: any;
   
-  public course: string;
+  course: string;
   public courses: Array<any> = [
     { name: "CMPE-411", description: "course_1" , isChecked: false},
     { name: "CMPE-224", description: "course_2" , isChecked: false},
@@ -47,54 +47,17 @@ export class StaffPage implements OnInit {
   constructor(public activatedRoute: ActivatedRoute, private route: ActivatedRoute, private router: Router,public vals:ValuesService) { }
 
   ngOnInit() {
-    // this.status = this.route.snapshot.queryParamMap.get('test_result');
-    // let userInfo = JSON.parse(localStorage.getItem('USER-INFO'));
-    // let testInfo = JSON.parse(localStorage.getItem('Test-Info'));
-    // //Checks if there is a welcome message
-    // if (userInfo == null) {
-    //   this.name = 'Staff';
-    //   this.surname = 'Member';
-    //   if (testInfo == null) {
-    //     //this.status = 'Please Get Tested';
-    //   }
-    //   else {
-    //     this.status = testInfo.test_result;
-    //     this.date = testInfo.test_date;
-    //   }
-    // }
-    // else {
-    //   console.log('There Is Info')
-    //   this.name = userInfo.first_name;
-    //   this.surname = userInfo.last_name;
-    //   if (testInfo == null) {
-    //     this.status = userInfo.test_date;
-    //   }
-    //   else {
-    //     this.status = testInfo.test_result;
-    //   }
-    //   if (userInfo.course_1) {
-    //     this.course = 'c1';
-    //   } else if (userInfo.course_2) {
-    //     this.course = 'c2';
-    //   } else if (userInfo.course_3) {
-    //     this.course = 'c3';
-    //   } else if (userInfo.course_4) {
-    //     this.course = 'c4';
-    //   } else if (userInfo.course_5) {
-    //     this.course = 'c5';
-    //   }
-    // }
   }
   ionViewWillEnter() {
     this.status = this.route.snapshot.queryParamMap.get('test_result');
     let userInfo = JSON.parse(localStorage.getItem('USER-INFO'));
     let testInfo = JSON.parse(localStorage.getItem('Test-Info'));
 
-    if (testInfo != null) {
+    if (testInfo !== null) {
       this.date = testInfo.test_date
       this.status = testInfo.test_result;
     }
-    if (userInfo != null && testInfo == null) {}
+    if (userInfo !== null && testInfo == null) {}
     {
       this.name = userInfo.first_name;
       this.surname = userInfo.last_name;
@@ -127,41 +90,6 @@ export class StaffPage implements OnInit {
         this.course = 'c5';
       }
     }
-
-    //Checks if there is a welcome message
-    // if (userInfo == null) {
-    //   this.name = 'Staff';
-    //   this.surname = 'Member';
-    //   if (testInfo == null) {
-    //     //this.status = 'Please Get Tested';
-    //   }
-    //   else {
-    //     this.status = testInfo.test_result;
-    //     this.date = testInfo.test_date;
-    //   }
-    // }
-    // else {
-    //   console.log('There Is Info')
-    //   this.name = userInfo.first_name;
-    //   this.surname = userInfo.last_name;
-    //   if (testInfo == null) {
-    //     this.status = userInfo.test_date;
-    //   }
-    //   else {
-    //     this.status = testInfo.test_result;
-    //   }
-    //   if (userInfo.course__1) {
-    //     this.course = 'c1';
-    //   } else if (userInfo.course__2) {
-    //     this.course = 'c2';
-    //   } else if (userInfo.course__3) {
-    //     this.course = 'c3';
-    //   } else if (userInfo.course__4) {
-    //     this.course = 'c4';
-    //   } else if (userInfo.course__5) {
-    //     this.course = 'c5';
-    //   }
-    // }
   }
   goBack() {
     setTimeout(() => {
@@ -173,12 +101,34 @@ export class StaffPage implements OnInit {
       this.router.navigate(['/scan']);
     }, 1000);
   }
-  goStudentList() {
+  goStudentList() {  //get positive students and go to student-list
+    let myCourse:string;
+    if(this.courses[0].isChecked){
+      myCourse = 'c1';
+    }
+    if(this.courses[1].isChecked){
+      myCourse = 'c2';
+    }
+    if(this.courses[2].isChecked){
+      myCourse = 'c3';
+    }
+    if(this.courses[3].isChecked){
+      myCourse = 'c4';
+    }
+    if(this.courses[4].isChecked){
+      myCourse = 'c5';
+    }
+    this.vals.GetMyStudents(myCourse);
+  }
+  goStudentList2() {
     let params: NavigationExtras = {
       queryParams: {
         course: this.course,
       },
     };
+    console.log('request info: ' + this.course);
+    console.log('request info2: ' + params);
+
     setTimeout(() => {
       this.router.navigate(['/student-list'], params);
     }, 1000);

@@ -59,7 +59,7 @@ export class ScanPage implements OnInit {
         "course_4": userInfo.course_4,  //Can change
         "course_5": userInfo.course_5,  //Can change
     }
-    this.vals.UpdateUser2(data,userInfo.username);
+    this.vals.UpdateUser(data,userInfo.username);
   }
   back() {
     setTimeout(() => {

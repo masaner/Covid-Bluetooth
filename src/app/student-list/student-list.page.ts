@@ -25,11 +25,10 @@ export class StudentListPage implements OnInit {
   constructor(private router: Router,private route:ActivatedRoute,public vals:ValuesService) { }
 
   ngOnInit() {
-    
   }
   ionViewWillEnter() {
     let userInfo = JSON.parse(localStorage.getItem('USER-INFO'));
-    //Checks if there is a welcome message
+    var mydata = localStorage.getItem("positiveStudents");
     if (userInfo == null) {
       this.name = 'Staff';
       this.surname = 'Member';
@@ -37,19 +36,12 @@ export class StudentListPage implements OnInit {
     else {
       this.name = userInfo.first_name;
       this.surname = userInfo.last_name;
-      this.course = this.route.snapshot.queryParamMap.get('course');
-      console.log(this.course)
-      this.getStudents();
     }
-  }
-  getStudents() {
-    this.students = this.vals.GetMyStudents(this.course);
-    console.log(this.students);
+    this.students = JSON.parse(mydata);
+    localStorage.removeItem("positiveStudents");
   }
   back() {
-    // setTimeout(() => {
       this.router.navigate(['/staff']);
-    // }, 500);
   }
 
 }

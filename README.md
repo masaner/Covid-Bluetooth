@@ -1,8 +1,18 @@
-# ionic Project - Bluetooth scanner - BLE
+# EMU COVID TRACER BY ALEYNA,BETUL,SARP
+STEPS:
+```
+1- npm install
+```
+```
+2- ionic capacitor add android
+```
+```
+3- ionic capacitor build android 
+```
+```
+4- (wait for android studio to open)
+    option a) Build --> Build Bundle/Apk --> Build APK --> Locate then drag and drop the apk file into your device 
+    option b) plug device into laptop using usb, choose device from device manager drop down, click the green start arrow at the top to install the app into phone
+```
 
-For some android devices you need to accept or turn on 
-the gps to make it work
 
-# for the arduino project - using the BLE
-Make sure you use a pull down resistor on your build
-without it wont work

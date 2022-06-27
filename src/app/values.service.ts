@@ -52,7 +52,6 @@ export class ValuesService {
     });
   }
   
-
   constructor(public http: HttpClient, public toastCtrl: ToastController, private router: Router) { }
   
   //TESTED

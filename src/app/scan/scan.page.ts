@@ -43,9 +43,10 @@ export class ScanPage implements OnInit {
   }
   save() {
     let userInfo = JSON.parse(localStorage.getItem('USER-INFO'));
+    let deviceInfo = localStorage.getItem('deviceID');
     let data =
     {
-        "device_id": null, //bluetooth Can change
+        "device_id": deviceInfo, //bluetooth Can change
         "username": userInfo.username,
         "password": userInfo.password,
         "first_name": userInfo.first_name,

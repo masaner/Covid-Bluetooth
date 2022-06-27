@@ -57,6 +57,8 @@ export class TestUploadPage implements OnInit {
   }
   save() {
     let userInfo = JSON.parse(localStorage.getItem('USER-INFO'));
+    let deviceInfo = localStorage.getItem('deviceID');
+
     let c1 = this.c1 === 'true';
     let c2 = this.c2 === 'true';
     let c3 = this.c3 === 'true';
@@ -64,7 +66,7 @@ export class TestUploadPage implements OnInit {
     let c5 = this.c5 === 'true';
     let data =
     {
-        "device_id": null, //bluetooth Can change
+        "device_id": deviceInfo, //bluetooth Can change
         "username": userInfo.username,
         "password": userInfo.password,
         "first_name": userInfo.first_name,
